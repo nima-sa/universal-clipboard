@@ -1,0 +1,24 @@
+{
+    "name": "Universal Clipboard",
+    "short_name": "Universal Clipboard",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#D60046",
+    "theme_color": "#D60046",
+    "description": "Universal Clipboard",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "static/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "static/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "version": "2.0"
+}
