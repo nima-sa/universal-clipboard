@@ -1,0 +1,1 @@
+G:\Dev\universal-clipboard\venv\Scripts\Python G:\Dev\universal-clipboard\app.py
