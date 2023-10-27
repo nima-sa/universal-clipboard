@@ -162,6 +162,10 @@
         console.log(request.responseText);
 
       };
+      request.onprogress = evt => {
+        console.log(evt)
+      }
+
       formData.append("file", file);
       request.send(formData);
     }
@@ -195,7 +199,7 @@
 
 
     <input type="file" id="fileInput" hidden onchange="onFilePicked()" name="file">
-    <textarea style="margin-top:10px; font-size: 150%" type="text" id="new-text" disabled rows="10"></textarea>
+    <textarea style="margin-top:10px; font-size: 150%" type="text" id="new-text" rows="10"></textarea>
   </div>
 
   <br />
