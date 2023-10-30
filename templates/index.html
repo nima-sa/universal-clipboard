@@ -147,6 +147,7 @@
       dropContainer.ondrop = function (evt) {
         fileInput.files = evt.dataTransfer.files;
         evt.preventDefault();
+        onFilePicked(evt);
       };
     })
 
@@ -199,12 +200,13 @@
 
 
     <input type="file" id="fileInput" hidden onchange="onFilePicked()" name="file">
-    <textarea style="margin-top:10px; font-size: 150%" type="text" id="new-text" rows="10"></textarea>
+    <textarea style="margin-top:10px; font-size: 150%" disabled type="text" id="new-text" rows="10"></textarea>
   </div>
 
   <br />
   <br />
   <button id="serveraddr-btn">server:</button>
+  ver 1.1
 
   <script>
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js')
