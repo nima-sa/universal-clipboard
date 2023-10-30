@@ -152,23 +152,31 @@
     })
 
     function onFilePicked(evt) {
-      const file = fileInput.files[0]
+      try {
+        const file = fileInput.files[0]
+        document.getElementById('progress-bar').innerText = ''
+        const API_ENDPOINT = "/file-upload";
+        const request = new XMLHttpRequest();
+        const formData = new FormData();
 
-      const API_ENDPOINT = "/file-upload";
-      const request = new XMLHttpRequest();
-      const formData = new FormData();
+        request.open("POST", API_ENDPOINT, true);
+        request.onreadystatechange = () => {
+          console.log(request.responseText);
 
-      request.open("POST", API_ENDPOINT, true);
-      request.onreadystatechange = () => {
-        console.log(request.responseText);
+        };
+        request.onprogress = evt => {
+          console.log(evt)
+          if (evt.lengthComputable) {
+            var complete = (evt.loaded / evt.total * 100 | 0);
+            document.getElementById('progress-bar').innerText = complete + '%'
+          }
+        }
 
-      };
-      request.onprogress = evt => {
-        console.log(evt)
+        formData.append("file", file);
+        request.send(formData);
+      } catch (err) {
+        alert(err.message)
       }
-
-      formData.append("file", file);
-      request.send(formData);
     }
 
     function dropContainerClick(evt) {
@@ -192,15 +200,15 @@
       </div>
       <div style="display: flex; flex-grow: 1; margin-left: 8px">
         <label for="txtf"></label>
-        <input class="def-el" style="font-size: 300%; flex-grow: 1;" type="text" id="txtf" placeholder="Paste text here..." />
+        <input class="def-el" style="font-size: 300%; flex-grow: 1;" type="text" id="txtf"
+          placeholder="Paste text here..." />
       </div>
     </div>
 
     <button class="btn-pr" id="paste">Paste from server</button>
-
-
     <input type="file" id="fileInput" hidden onchange="onFilePicked()" name="file">
     <textarea style="margin-top:10px; font-size: 150%" disabled type="text" id="new-text" rows="10"></textarea>
+    <span id="progress-bar"></span>
   </div>
 
   <br />
