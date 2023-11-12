@@ -5,3 +5,8 @@ pyperclip
 python-xlib
 pystray
 Werkzeug
+
+
+websockets
+fastapi
+python-multipart

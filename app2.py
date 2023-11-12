@@ -1,17 +1,7 @@
-import asyncio
-import uvicorn
-
-import socket
-import threading
-
+from server_handler import socketio, app, send_new_clipboard
 from ui_handler import UIApp
-import server_handler
-
-
-async def server(host, port):
-    config = uvicorn.Config(server_handler.app, host=host, port=port)
-    await uvicorn.Server(config).serve()
-
+import threading
+import socket
 
 def _send_new_clipboard():
     send_new_clipboard(None)
@@ -24,21 +14,19 @@ def raisingSth():
         print('ok')
 
 
-if __name__ == '__main__':
-    HOST = '0.0.0.0'
-    PORT = 8000
 
+if __name__ == '__main__':
+    PORT = 8000
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     ip_addr, _ = s.getsockname()
     s.close()
     print(ip_addr, PORT)
-
     socket_thread = threading.Thread(
-        target=lambda: asyncio.run(server(HOST, PORT))
-    )
+        target=lambda: socketio.run(app, '0.0.0.0', f'{PORT}')
+        )
     socket_thread.daemon = True
     socket_thread.start()
 
-    # asyncio.run(server(HOST, PORT))
     UIApp(_send_new_clipboard, lambda: raisingSth(), (ip_addr, PORT)).mainloop()
+
