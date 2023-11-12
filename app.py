@@ -40,5 +40,4 @@ if __name__ == '__main__':
     socket_thread.daemon = True
     socket_thread.start()
 
-    # asyncio.run(server(HOST, PORT))
     UIApp(_send_new_clipboard, lambda: raisingSth(), (ip_addr, PORT)).mainloop()
