@@ -70,6 +70,10 @@
                 })
         }
 
+        function download() {
+
+        }
+
         document.addEventListener('visibilitychange', (e) => {
             if (!document.hidden) {
                 updateClipboard()
@@ -95,7 +99,6 @@
 
             socket.onmessage = function (message) {
                 const data = JSON.parse(message.data)
-                console.log(data)
             }
 
             socket.onopen = function () {
@@ -107,23 +110,8 @@
             socket.onclose = function () {
                 document.getElementById('stat').innerText = 'Disconnected'
                 document.getElementById('stat').style.color = 'red'
-
-                //   disconnectInterval = setInterval(() => {
-                //     socket = new WebSocket(protocol + '://' + serveraddr)
-                //     while(socket.CONNECTING){}
-                //     if(!socket.OPEN) {
-                //         console.log('here')
-                //     } else {
-                //         console.log('here2')
-                //         clearInterval(disconnectInterval)
-                //     }
-                //   }, 1000)
             }
 
-            /*    socket.on('new-value', function (e) {
-                                          copyText(e.clipboard)
-                                        })
-                                  */
             if (window.isSecureContext) {
                 document.getElementById('txtf').onclick = function (event) {
                     navigator.clipboard.readText().then((text) => {
@@ -158,6 +146,11 @@
             document.getElementById('paste').onclick = function (e) {
                 updateClipboard()
             }
+
+            // document.getElementById('download').onclick = function (e) {
+            //     download()
+            // }
+
 
             document.getElementById('stat').onclick = function (e) {
                 //document.getElementById('stat').innerText = 'Restarting...'
@@ -232,6 +225,9 @@
         </div>
 
         <button class="btn-pr" id="paste">Paste from server</button>
+        <form action="/download">
+            <input type="submit" class="btn-pr" id="download" value="Download from server" name="action">
+        </form>
         <input type="file" id="fileInput" hidden onchange="onFilePicked()" name="file" />
         <textarea style="margin-top:10px; font-size: 150%" disabled type="text" id="new-text" rows="10"></textarea>
         <span id="progress-bar"></span>

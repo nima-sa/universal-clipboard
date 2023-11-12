@@ -17,6 +17,11 @@ def _send_new_clipboard():
     send_new_clipboard(None)
 
 
+def set_file_path_callback(path):
+    print('here')
+    server_handler.TEMP_FILE_UPLOAD_PATH = path
+
+
 def raisingSth():
     try:
         raise Exception()
@@ -40,4 +45,4 @@ if __name__ == '__main__':
     socket_thread.daemon = True
     socket_thread.start()
 
-    UIApp(_send_new_clipboard, lambda: raisingSth(), (ip_addr, PORT)).mainloop()
+    UIApp(_send_new_clipboard, set_file_path_callback, lambda: raisingSth(), (ip_addr, PORT)).mainloop()

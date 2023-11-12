@@ -1,7 +1,5 @@
 from fastapi import FastAPI, WebSocket, UploadFile, File
-from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
-from pydantic import BaseModel
-
+from fastapi.responses import HTMLResponse, FileResponse, JSONResponse, RedirectResponse
 
 import pyperclip
 import os
@@ -10,6 +8,7 @@ import platform
 import json
 import shutil
 
+TEMP_FILE_UPLOAD_PATH = ''
 app = FastAPI()
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -46,6 +45,16 @@ async def manifest():
 async def send_clipboard(data=None):
     return JSONResponse({'clipboard': read_clipboard()})
 
+
+@app.get('/download')
+async def download():
+    try:
+        if TEMP_FILE_UPLOAD_PATH == '':
+            raise Exception('Path is empty')
+        return FileResponse(TEMP_FILE_UPLOAD_PATH)
+    except Exception as e:
+        print(e)
+        return RedirectResponse('/')
 
 
 @app.post('/file-upload')

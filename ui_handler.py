@@ -1,15 +1,15 @@
 # Import the required libraries
 import tkinter
+from tkinter.filedialog import askopenfilename
 
 from pystray import MenuItem as item
 import pystray
 from PIL import Image, ImageTk
 
-TK_SILENCE_DEPRECATION=1
 class UIApp:
-
-    def __init__(self, copy_callback, kill, addr):
+    def __init__(self, copy_callback, set_file_path_callback, kill, addr):
         self.copy_callback = copy_callback
+        self.set_file_path_callback = set_file_path_callback
         self.kill = kill
         self.win = tkinter.Tk()
         self.win.resizable(False, False)
@@ -24,6 +24,10 @@ class UIApp:
         text.insert('1.0', f'{addr[0]}:{addr[1]}')
 
         self.hide_window()
+
+    def open_file(self, icon, item):
+        p = askopenfilename(title="Choose a file.")
+        self.set_file_path_callback(p)
 
     def quit_window(self, icon, item):
         self.kill()
@@ -42,6 +46,7 @@ class UIApp:
         image = Image.open('static/icon-512-transparent.png')
         menu = [
             item('Quit', self.quit_window),
+            item('Choose file', self.open_file),
             item('Show', self.show_window),
             item('Paste on devices', self.copy_to_clipboard)
         ]
