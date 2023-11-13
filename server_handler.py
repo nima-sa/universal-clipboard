@@ -23,6 +23,7 @@ def copy_file_to_clipboard(file_path):
 
 @app.get('/')
 async def index():
+    # some rels did not work with FileResponse, so...
     with open('templates/index.html', 'r') as f:
         html = f.read()
     
