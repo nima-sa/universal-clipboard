@@ -13,6 +13,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-touch-icon" content="static/icon-512.png" />
 
+    <meta name="application-name" content="U-Clipboard">
+    <!-- <meta name="viewport" content="width=device-width,initial-scale=0.5"> -->
+
     <meta name="theme-color" content="#000000" />
 
     <link rel="apple-touch-icon" href="static/Icon-192.png" />
@@ -39,6 +42,7 @@
             text-align: center;
             background: transparent;
             font-size: 300%;
+            font-weight: 400;
         }
 
         .btn-pr:hover {
@@ -223,7 +227,7 @@
         </div>
 
         <button class="btn-pr" id="paste">Paste from server</button>
-        <form action="/download" method="POST">
+        <form action="/download" method="POST" target="_blank">
             <input type="submit" class="btn-pr" id="download" value="Download from server" name="action">
         </form>
         <input type="file" id="fileInput" hidden onchange="onFilePicked()" name="file" />

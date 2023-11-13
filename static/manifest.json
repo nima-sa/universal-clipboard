@@ -1,5 +1,5 @@
 {
-    "name": "Universal Clipboard",
+    "name": "U-Clipboard",
     "short_name": "Universal Clipboard",
     "start_url": ".",
     "display": "standalone",
@@ -20,5 +20,5 @@
             "type": "image/png"
         }
     ],
-    "version": "1.3"
+    "version": "1.0"
 }

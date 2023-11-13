@@ -65,7 +65,7 @@ async def download(request: Request):
         return FileResponse(TEMP_FILE_UPLOAD_PATH, headers=headers)
     except Exception as e:
         print(e)
-        return RedirectResponse('/')
+        return RedirectResponse('/', status_code=302)
 
 
 @app.post('/file-upload')
@@ -105,6 +105,10 @@ async def websocket_endpoint(websocket: WebSocket):
     while True:
         try:
             data = await websocket.receive_text()
+        except:
+            break
+
+        try:
             data = json.loads(data)
             function = data['function']
             await functions[function](data['payload'], websocket)
