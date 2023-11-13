@@ -103,8 +103,8 @@ async def websocket_endpoint(websocket: WebSocket):
     }
 
     while True:
-        data = await websocket.receive_text()
         try:
+            data = await websocket.receive_text()
             data = json.loads(data)
             function = data['function']
             await functions[function](data['payload'], websocket)
