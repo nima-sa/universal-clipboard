@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <title>Universal Clipboard</title>
     <link rel="shortcut icon" href="static/icon-512.png" />
-    <link rel="manifest" href="manifest.json" />
+    <link rel="manifest" href="manifest.json" crossorigin="use-credentials"/>
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -49,10 +49,14 @@
             background: transparent;
         }
     </style>
-    <script charset="utf-8" type="text/javascript">
+    <script charset="utf-8" type="text/javascript" defer>
         let clipboard = ''
         let serveraddr = localStorage.getItem('serveraddr') ?? document.domain + ':' + location.port
         let request = null
+
+
+        let disconnectInterval = null
+        let socket = null
 
         function copyText(text) {
             document.getElementById('new-text').value = text
@@ -70,15 +74,34 @@
                 })
         }
 
-        function download() {
-
-        }
 
         document.addEventListener('visibilitychange', (e) => {
             if (!document.hidden) {
                 updateClipboard()
             }
         })
+        function connectSocket() {
+            let protocol = window.location.protocol === 'https' ? 'wss' : 'ws'
+            socket = new WebSocket(protocol + '://' + serveraddr)
+            socket.onmessage = function (message) {
+                const data = JSON.parse(message.data)
+            }
+
+            socket.onopen = function () {
+                document.getElementById('stat').innerText = 'Connected'
+                document.getElementById('stat').style.color = 'green'
+                // updateClipboard()
+                disconnectInterval && clearInterval(disconnectInterval)
+            }
+
+            socket.onclose = function () {
+                document.getElementById('stat').innerText = 'Disconnected'
+                document.getElementById('stat').style.color = 'red'
+                disconnectInterval = setInterval(() => {
+                    connectSocket()
+                }, 1000);
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', function (event) {
             serverAddrBtn = document.getElementById('serveraddr-btn')
@@ -92,25 +115,8 @@
                 serverAddrBtn.innerText = 'server: ' + serveraddr
             }
 
-            let protocol = window.location.protocol === 'https' ? 'wss' : 'ws'
 
-            let socket = new WebSocket(protocol + '://' + serveraddr)
-            let disconnectInterval = null
-
-            socket.onmessage = function (message) {
-                const data = JSON.parse(message.data)
-            }
-
-            socket.onopen = function () {
-                document.getElementById('stat').innerText = 'Connected'
-                document.getElementById('stat').style.color = 'green'
-                updateClipboard()
-            }
-
-            socket.onclose = function () {
-                document.getElementById('stat').innerText = 'Disconnected'
-                document.getElementById('stat').style.color = 'red'
-            }
+            connectSocket()
 
             if (window.isSecureContext) {
                 document.getElementById('txtf').onclick = function (event) {
@@ -147,16 +153,6 @@
                 updateClipboard()
             }
 
-            // document.getElementById('download').onclick = function (e) {
-            //     download()
-            // }
-
-
-            document.getElementById('stat').onclick = function (e) {
-                //document.getElementById('stat').innerText = 'Restarting...'
-                //document.getElementById('stat').style.color = 'orange'
-                //socket.emit('restartService', {})
-            }
 
             const dropContainer = document.getElementById('dropContainer')
             const fileInput = document.getElementById('fileInput')
@@ -187,7 +183,7 @@
                 request.onprogress = (evt) => {
                     console.log(evt)
                     if (evt.lengthComputable) {
-                        var complete = ((evt.loaded / evt.total) * 100) | 0
+                        var complete = ((evt.loaded / evt.total) * 100)
                         document.getElementById('progress-bar').innerText = complete + '%'
                     }
                 }
@@ -202,6 +198,8 @@
         function dropContainerClick(evt) {
             fileInput.click()
         }
+
+
     </script>
 </head>
 
@@ -225,7 +223,7 @@
         </div>
 
         <button class="btn-pr" id="paste">Paste from server</button>
-        <form action="/download">
+        <form action="/download" method="POST">
             <input type="submit" class="btn-pr" id="download" value="Download from server" name="action">
         </form>
         <input type="file" id="fileInput" hidden onchange="onFilePicked()" name="file" />
@@ -236,7 +234,7 @@
     <br />
     <br />
     <button id="serveraddr-btn">server:</button>
-    ver 1.1
+    ver 1.0
     <script>
         if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js')
     </script>

@@ -1,5 +1,5 @@
-from fastapi import FastAPI, WebSocket, UploadFile, File
-from fastapi.responses import HTMLResponse, FileResponse, JSONResponse, RedirectResponse
+from fastapi import FastAPI, WebSocket, UploadFile, Request
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse, HTMLResponse
 
 import pyperclip
 import os
@@ -23,7 +23,10 @@ def copy_file_to_clipboard(file_path):
 
 @app.get('/')
 async def index():
-    return FileResponse('templates/index.html')
+    with open('templates/index.html', 'r') as f:
+        html = f.read()
+    
+    return HTMLResponse(html)
 
 
 @app.get('/service-worker.js')
@@ -34,6 +37,10 @@ async def service_worker():
 @app.get('/precache-manifest.js')
 async def precache():
     return FileResponse('static/precache-manifest.js')
+
+@app.get('/static/{f}')
+async def static(f: str):
+    return FileResponse(f'static/{f}')
 
 
 @app.get('/manifest.json')
@@ -46,12 +53,15 @@ async def send_clipboard(data=None):
     return JSONResponse({'clipboard': read_clipboard()})
 
 
-@app.get('/download')
-async def download():
+@app.post('/download')
+async def download(request: Request):
     try:
         if TEMP_FILE_UPLOAD_PATH == '':
             raise Exception('Path is empty')
-        return FileResponse(TEMP_FILE_UPLOAD_PATH)
+        
+        filename = os.path.basename(TEMP_FILE_UPLOAD_PATH)
+        headers = {'Content-Disposition': f'attachment; filename="{filename}"'}
+        return FileResponse(TEMP_FILE_UPLOAD_PATH, headers=headers)
     except Exception as e:
         print(e)
         return RedirectResponse('/')
