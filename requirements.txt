@@ -10,3 +10,4 @@ Werkzeug
 websockets
 fastapi
 python-multipart
+uvicorn
