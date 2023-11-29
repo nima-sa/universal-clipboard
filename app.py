@@ -3,6 +3,10 @@ import uvicorn
 
 import socket
 import threading
+import shutil
+
+import json
+import os
 
 from ui_handler import UIApp
 import server_handler
@@ -14,7 +18,7 @@ async def server(host, port):
 
 
 def _send_new_clipboard():
-    send_new_clipboard(None)
+    pass
 
 
 def set_file_path_callback(path):
@@ -30,19 +34,35 @@ def raisingSth():
 
 
 if __name__ == '__main__':
-    HOST = '0.0.0.0'
-    PORT = 8000
+    try:
 
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    ip_addr, _ = s.getsockname()
-    s.close()
-    print(ip_addr, PORT)
+        if os.path.exists('tmp'):
+            shutil.rmtree('tmp', ignore_errors=True)
 
-    socket_thread = threading.Thread(
-        target=lambda: asyncio.run(server(HOST, PORT))
-    )
-    socket_thread.daemon = True
-    socket_thread.start()
+        if os.path.exists('configs.json'):
+            with open('configs.json', 'r') as f:
+                configs = json.load(f)
+        else:
+            configs = {}
 
-    UIApp(_send_new_clipboard, set_file_path_callback, lambda: raisingSth(), (ip_addr, PORT)).mainloop()
+        HOST = configs.get('ip', '0.0.0.0')
+        PORT = configs.get('port', 8000)
+
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip_addr, _ = s.getsockname()
+        s.close()
+        print(ip_addr, PORT)
+
+        socket_thread = threading.Thread(
+            target=lambda: asyncio.run(server(HOST, PORT))
+        )
+        socket_thread.daemon = True
+        socket_thread.start()
+
+        UIApp(_send_new_clipboard, set_file_path_callback, lambda: raisingSth(), (ip_addr, PORT)).mainloop()
+
+    except Exception as e:
+        print(e)
+    
+# input('')
