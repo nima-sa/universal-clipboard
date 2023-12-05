@@ -1,3 +1,3 @@
-"G:\Dev\venv 3.12\Scripts\Python" "C:\Users\nimas\iCloudDrive\Dev\Projects\python\universal-clipboard\app.py"
+"G:\Dev\venv 3.12\Scripts\Python" "C:\Users\nimas\iCloudDrive\Dev\Projects\python\universal-clipboard\app.pyw"
 
 @REM set /p DUMMY=Hit ENTER to continue...
