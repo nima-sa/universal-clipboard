@@ -30,9 +30,10 @@ class UIApp:
         self.set_file_path_callback(p)
 
     def quit_window(self, icon, item):
-        self.kill()
         icon.stop()
         self.win.destroy()
+        self.win.quit()
+        self.kill()
 
     def show_window(self, icon, item):
         icon.stop()

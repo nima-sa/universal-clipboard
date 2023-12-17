@@ -26,11 +26,8 @@ def set_file_path_callback(path):
     server_handler.TEMP_FILE_UPLOAD_PATH = path
 
 
-def raisingSth():
-    try:
-        raise Exception()
-    except:
-        print('ok')
+def quit():
+    exit(0)
 
 
 if __name__ == '__main__':
@@ -60,7 +57,7 @@ if __name__ == '__main__':
         socket_thread.daemon = True
         socket_thread.start()
 
-        UIApp(_send_new_clipboard, set_file_path_callback, lambda: raisingSth(), (ip_addr, PORT)).mainloop()
+        UIApp(_send_new_clipboard, set_file_path_callback, quit, (ip_addr, PORT)).mainloop()
 
     except Exception as e:
         print(e)
