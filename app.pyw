@@ -10,7 +10,7 @@ import os
 
 from ui_handler import UIApp
 import server_handler
-
+import tkinter.messagebox
 
 async def server(host, port):
     config = uvicorn.Config(server_handler.app, host=host, port=port)
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     try:
 
         if os.path.exists('tmp'):
-            shutil.rmtree('tmp', ignore_errors=True)
+            shutil.rmtree('./tmp', ignore_errors=True)
 
         if os.path.exists('configs.json'):
             with open('configs.json', 'r') as f:
@@ -61,5 +61,6 @@ if __name__ == '__main__':
 
     except Exception as e:
         print(e)
+        tkinter.messagebox.showerror(title='Error', message=str(e))
     
 # input('')
