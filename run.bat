@@ -1,3 +1,3 @@
-"D:\Dev\venv 3.12\Scripts\Python" "D:\Dev\universal-clipboard\app.pyw"
+"D:\Dev\venv 3.12\Scripts\Python" "D:\Dev\universal-clipboard\app.py"
 
 @REM set /p DUMMY=Hit ENTER to continue...
