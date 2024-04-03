@@ -1,3 +1,0 @@
-"D:\Dev\Venv 3.12\Scripts\Activate"
-
-pyinstaller --onefile app.pyw --icon=static/icon-512.png --name="Universal Clipboard" --nowindow
